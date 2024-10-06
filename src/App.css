@@ -1,38 +1,65 @@
-.App {
+.app {
   text-align: center;
+  font-family: Arial, sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+textarea {
+  width: 80%;
+  height: 100px;
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+button {
+  padding: 10px 20px;
+  margin: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+button:hover {
+  background-color: #0056b3;
+}
+
+.sentiment-display {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.sentiment-button {
+  width: 100px;
+  height: 100px;
+  margin: 0 10px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  font-weight: bold;
   color: white;
+  transition: transform 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.sentiment-button.active {
+  transform: scale(1.2);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sentiment-button.positive {
+  background-color: green;
+}
+
+.sentiment-button.negative {
+  background-color: red;
+}
+
+.sentiment-button.neutral {
+  background-color: grey;
 }
