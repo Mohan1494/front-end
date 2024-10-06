@@ -3,9 +3,13 @@ import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState('');
+  const [sentiment, setSentiment] = useState('none'); // Initial sentiment state
+  const [loading, setLoading] = useState(false); // Loading state
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    setLoading(true); // Set loading state
+
     try {
       const response = await fetch('https://back-end-jis5.onrender.com/analyze', {
         method: 'POST',
@@ -14,35 +18,49 @@ function App() {
         },
         body: JSON.stringify({ text: newsInput }),  
       });
-  
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok'); // Handle response errors
+      }
+
       const data = await response.json();
-      setSentiment(data.sentiment); // assuming backend returns { sentiment: 'positive' }
+      setSentiment(data.sentiment); // Assuming backend returns { sentiment: 'positive' }
     } catch (error) {
       console.error('Error fetching sentiment:', error);
+      setSentiment('error'); // Set sentiment to 'error' if request fails
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
   
-
   return (
     <div className="app">
       <h1>News Sentiment Classifier</h1>
-      <textarea
-        value={newsInput}
-        onChange={(e) => setNewsInput(e.target.value)}
-        placeholder="Enter news content here..."
-      />
-      <button onClick={handleSubmit}>Classify</button>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={newsInput}
+          onChange={(e) => setNewsInput(e.target.value)}
+          placeholder="Enter news content here..."
+        />
+        <button type="submit" disabled={loading}>{loading ? 'Classifying...' : 'Classify'}</button>
+      </form>
 
       <div className="sentiment-display">
-        <div className={`sentiment-button ${sentiment === 'positive' ? 'active positive' : ''}`}>
-          Positive
-        </div>
-        <div className={`sentiment-button ${sentiment === 'negative' ? 'active negative' : ''}`}>
-          Negative
-        </div>
-        <div className={`sentiment-button ${sentiment === 'neutral' ? 'active neutral' : ''}`}>
-          Neutral
-        </div>
+        {sentiment === 'error' ? (
+          <div className="error-message">Error fetching sentiment. Please try again.</div>
+        ) : (
+          <>
+            <div className={`sentiment-button ${sentiment === 'positive' ? 'active positive' : ''}`}>
+              Positive
+            </div>
+            <div className={`sentiment-button ${sentiment === 'negative' ? 'active negative' : ''}`}>
+              Negative
+            </div>
+            <div className={`sentiment-button ${sentiment === 'neutral' ? 'active neutral' : ''}`}>
+              Neutral
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
