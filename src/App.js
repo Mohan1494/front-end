@@ -11,16 +11,17 @@ function App() {
     setLoading(true); // Set loading state
 
     try {
-      const response = await fetch('https://back-end-jis5.onrender.com/analyze', {
+      const response = await fetch('https://your-backend-url/analyze', { // Replace with your backend URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: newsInput }),  
+        body: JSON.stringify({ text: newsInput }),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok'); // Handle response errors
+        const errorData = await response.json(); // Try to get error details from the response
+        throw new Error(errorData.error || 'Network response was not ok'); // Handle response errors
       }
 
       const data = await response.json();
@@ -32,7 +33,7 @@ function App() {
       setLoading(false); // Reset loading state
     }
   };
-  
+
   return (
     <div className="app">
       <h1>News Sentiment Classifier</h1>
@@ -50,14 +51,14 @@ function App() {
           <div className="error-message">Error fetching sentiment. Please try again.</div>
         ) : (
           <>
-            <div className={`sentiment-button ${sentiment === 'positive' ? 'active positive' : ''}`}>
-              Positive
+            <div className={`sentiment-button ${sentiment === 'Not Favorable' ? 'active negative' : ''}`}>
+              Not Favorable
             </div>
-            <div className={`sentiment-button ${sentiment === 'negative' ? 'active negative' : ''}`}>
-              Negative
-            </div>
-            <div className={`sentiment-button ${sentiment === 'neutral' ? 'active neutral' : ''}`}>
+            <div className={`sentiment-button ${sentiment === 'Neutral' ? 'active neutral' : ''}`}>
               Neutral
+            </div>
+            <div className={`sentiment-button ${sentiment === 'Favorable' ? 'active positive' : ''}`}>
+              Favorable
             </div>
           </>
         )}
