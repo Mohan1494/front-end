@@ -11,7 +11,7 @@ function App() {
     setLoading(true); // Set loading state
 
     try {
-      const response = await fetch('https://your-backend-url/analyze', { // Replace with your backend URL
+      const response = await fetch('https://back-end-jis5.onrender.com/analyze', { // Replace with your backend URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
