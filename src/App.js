@@ -7,7 +7,7 @@ function App() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('https://back-end-jis5.onrender.com', {
+      const response = await fetch('https://back-end-jis5.onrender.com/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
