@@ -3,13 +3,13 @@ import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState(null);
+  const [sentiment, setSentiment] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setSentiment(null); // Clear any previous sentiment
+    setSentiment(''); // Clear previous sentiment
 
     try {
       const response = await fetch('https://my-fastapi-app-16h4.onrender.com/predict/', {
@@ -38,19 +38,6 @@ function App() {
     }
   };
 
-  const getSentimentColor = () => {
-    switch (sentiment) {
-      case 'favorable':
-        return 'positive';
-      case 'neutral':
-        return 'neutral';
-      case 'not favorable':
-        return 'negative';
-      default:
-        return '';
-    }
-  };
-
   return (
     <div className="app">
       <div className="container">
@@ -74,9 +61,8 @@ function App() {
             sentiment === 'error' ? (
               <div className="error-message">Error fetching sentiment. Please try again.</div>
             ) : (
-              <div className="sentiment-result">
-                <div className={`sentiment-circle ${getSentimentColor()}`}></div>
-                <div className="sentiment-label">{sentiment}</div>
+              <div className={`sentiment-result ${sentiment.replace(/\s+/g, '-')}`}>
+                {sentiment}
               </div>
             )
           ) : null}
