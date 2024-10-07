@@ -38,6 +38,19 @@ function App() {
     }
   };
 
+  const getSentimentColor = () => {
+    switch (sentiment) {
+      case 'favorable':
+        return 'positive';
+      case 'neutral':
+        return 'neutral';
+      case 'not favorable':
+        return 'negative';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="app">
       <div className="container">
@@ -62,17 +75,7 @@ function App() {
               <div className="error-message">Error fetching sentiment. Please try again.</div>
             ) : (
               <div className="sentiment-result">
-                <div
-                  className={`sentiment-circle ${
-                    sentiment === 'not favorable'
-                      ? 'negative'
-                      : sentiment === 'neutral'
-                      ? 'neutral'
-                      : sentiment === 'favorable'
-                      ? 'positive'
-                      : ''
-                  }`}
-                ></div>
+                <div className={`sentiment-circle ${getSentimentColor()}`}></div>
                 <div className="sentiment-label">{sentiment}</div>
               </div>
             )
