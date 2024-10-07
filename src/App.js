@@ -3,15 +3,16 @@ import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState('none'); // Initial sentiment state
-  const [loading, setLoading] = useState(false); // Loading state
+  const [sentiment, setSentiment] = useState(null); // Changed default state to null for clarity
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-    setLoading(true); // Set loading state
+    e.preventDefault();
+    setLoading(true);
+    setSentiment(null); // Clear any previous sentiment
 
     try {
-      const response = await fetch('https://my-fastapi-app-16h4.onrender.com/predict/', { // Replace with your backend URL
+      const response = await fetch('https://my-fastapi-app-16h4.onrender.com/predict/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,18 +21,20 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Try to get error details from the response
-        throw new Error(errorData.error || 'Network response was not ok'); // Handle response errors
+        throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
-      console.log("Received response:", data); // Log response to verify the backend response structure
-      setSentiment(data.sentiment); // Assuming backend returns { sentiment: 'Not Favorable' }
+      if (data && data.sentiment) {
+        setSentiment(data.sentiment.trim());
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (error) {
-      console.error('Error fetching sentiment:', error);
-      setSentiment('error'); // Set sentiment to 'error' if request fails
+      console.error('Error:', error);
+      setSentiment('Error');
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -41,10 +44,7 @@ function App() {
       <form onSubmit={handleSubmit}>
         <textarea
           value={newsInput}
-          onChange={(e) => {
-            setNewsInput(e.target.value);
-            console.log("Input Text:", e.target.value); // Print input text to confirm it's captured correctly
-          }}
+          onChange={(e) => setNewsInput(e.target.value)}
           placeholder="Enter news content here..."
         />
         <button type="submit" disabled={loading}>
@@ -53,21 +53,19 @@ function App() {
       </form>
 
       <div className="sentiment-display">
-        {sentiment === 'error' ? (
-          <div className="error-message">Error fetching sentiment. Please try again.</div>
-        ) : (
-          <>
-            <div className={`sentiment-button ${sentiment === 'Not Favorable' ? 'active negative' : ''}`}>
-              Not Favorable
+        {loading ? (
+          <div>Loading...</div>
+        ) : sentiment ? (
+          sentiment === 'Error' ? (
+            <div className="error-message">Error fetching sentiment. Please try again.</div>
+          ) : (
+            <div className="sentiment-result">
+              <div className={`sentiment-label ${sentiment === 'Not Favorable' ? 'negative' : sentiment === 'Neutral' ? 'neutral' : 'positive'}`}>
+                {sentiment}
+              </div>
             </div>
-            <div className={`sentiment-button ${sentiment === 'Neutral' ? 'active neutral' : ''}`}>
-              Neutral
-            </div>
-            <div className={`sentiment-button ${sentiment === 'Favorable' ? 'active positive' : ''}`}>
-              Favorable
-            </div>
-          </>
-        )}
+          )
+        ) : null}
       </div>
     </div>
   );
