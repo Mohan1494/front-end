@@ -3,13 +3,12 @@ import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [sentiment, setSentiment] = useState('none'); // Initial sentiment state
+  const [loading, setLoading] = useState(false); // Loading state
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSentiment(''); // Clear previous sentiment
+    e.preventDefault(); // Prevent default form submission
+    setLoading(true); // Set loading state
 
     try {
       const response = await fetch('https://my-fastapi-app-16h4.onrender.com/predict/', {
@@ -21,52 +20,45 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
       }
 
       const data = await response.json();
-      if (data && data.sentiment) {
-        setSentiment(data.sentiment.trim().toLowerCase());
-      } else {
-        throw new Error('Invalid response format');
-      }
+      setSentiment(data.sentiment); // Update sentiment state based on response
     } catch (error) {
-      console.error('Error:', error);
-      setSentiment('error');
+      console.error('Error fetching sentiment:', error);
+      setSentiment('error'); // Set sentiment to 'error' if request fails
     } finally {
-      setLoading(false);
+      setLoading(false); // Reset loading state
     }
   };
 
   return (
     <div className="app">
-      <div className="container">
-        <h1 className="title">News Sentiment Classifier</h1>
-        <form className="form" onSubmit={handleSubmit}>
-          <textarea
-            className="textarea"
-            value={newsInput}
-            onChange={(e) => setNewsInput(e.target.value)}
-            placeholder="Enter news content here..."
-          />
-          <button type="submit" className="button" disabled={loading}>
-            {loading ? 'Classifying...' : 'Classify'}
-          </button>
-        </form>
+      <h1 className="title">News Sentiment Classifier</h1>
+      <form onSubmit={handleSubmit} className="form">
+        <textarea
+          className="textarea"
+          value={newsInput}
+          onChange={(e) => setNewsInput(e.target.value)}
+          placeholder="Enter news content here..."
+        />
+        <button type="submit" className="button" disabled={loading}>
+          {loading ? 'Classifying...' : 'Classify'}
+        </button>
+      </form>
 
-        <div className="sentiment-display">
-          {loading ? (
-            <div className="loading-message">Analyzing sentiment...</div>
-          ) : sentiment ? (
-            sentiment === 'error' ? (
-              <div className="error-message">Error fetching sentiment. Please try again.</div>
-            ) : (
-              <div className={`sentiment-result ${sentiment.replace(/\s+/g, '-')}`}>
-                {sentiment}
-              </div>
-            )
-          ) : null}
-        </div>
+      <div className="sentiment-display">
+        {sentiment === 'error' ? (
+          <div className="error-message">Error fetching sentiment. Please try again.</div>
+        ) : (
+          sentiment !== 'none' && (
+            <div className={`sentiment-result ${sentiment.toLowerCase().replace(" ", "-")}`}>
+              {sentiment}
+            </div>
+          )
+        )}
       </div>
     </div>
   );
