@@ -40,7 +40,10 @@ function App() {
       <form onSubmit={handleSubmit}>
         <textarea
           value={newsInput}
-          onChange={(e) => setNewsInput(e.target.value)}
+          onChange={(e) => {
+            setNewsInput(e.target.value);
+            console.log("Input Text:", e.target.value); // Print input text to confirm it's captured correctly
+          }}
           placeholder="Enter news content here..."
         />
         <button type="submit" disabled={loading}>
