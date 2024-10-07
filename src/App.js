@@ -26,13 +26,13 @@ function App() {
 
       const data = await response.json();
       if (data && data.sentiment) {
-        setSentiment(data.sentiment.trim());
+        setSentiment(data.sentiment.trim().toLowerCase());
       } else {
         throw new Error('Invalid response format');
       }
     } catch (error) {
       console.error('Error:', error);
-      setSentiment('Error');
+      setSentiment('error');
     } finally {
       setLoading(false);
     }
@@ -40,39 +40,44 @@ function App() {
 
   return (
     <div className="app">
-      <h1>News Sentiment Classifier</h1>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={newsInput}
-          onChange={(e) => setNewsInput(e.target.value)}
-          placeholder="Enter news content here..."
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Classifying...' : 'Classify'}
-        </button>
-      </form>
+      <div className="container">
+        <h1 className="title">News Sentiment Classifier</h1>
+        <form className="form" onSubmit={handleSubmit}>
+          <textarea
+            className="textarea"
+            value={newsInput}
+            onChange={(e) => setNewsInput(e.target.value)}
+            placeholder="Enter news content here..."
+          />
+          <button type="submit" className="button" disabled={loading}>
+            {loading ? 'Classifying...' : 'Classify'}
+          </button>
+        </form>
 
-      <div className="sentiment-display">
-        {loading ? (
-          <div className="loading-message">Loading...</div>
-        ) : sentiment ? (
-          sentiment === 'Error' ? (
-            <div className="error-message">Error fetching sentiment. Please try again.</div>
-          ) : (
-            <div className="sentiment-result">
-              <div
-                className={`sentiment-circle ${
-                  sentiment === 'Not Favorable'
-                    ? 'negative'
-                    : sentiment === 'Neutral'
-                    ? 'neutral'
-                    : 'positive'
-                }`}
-              ></div>
-              <div className="sentiment-label">{sentiment}</div>
-            </div>
-          )
-        ) : null}
+        <div className="sentiment-display">
+          {loading ? (
+            <div className="loading-message">Analyzing sentiment...</div>
+          ) : sentiment ? (
+            sentiment === 'error' ? (
+              <div className="error-message">Error fetching sentiment. Please try again.</div>
+            ) : (
+              <div className="sentiment-result">
+                <div
+                  className={`sentiment-circle ${
+                    sentiment === 'not favorable'
+                      ? 'negative'
+                      : sentiment === 'neutral'
+                      ? 'neutral'
+                      : sentiment === 'favorable'
+                      ? 'positive'
+                      : ''
+                  }`}
+                ></div>
+                <div className="sentiment-label">{sentiment}</div>
+              </div>
+            )
+          ) : null}
+        </div>
       </div>
     </div>
   );

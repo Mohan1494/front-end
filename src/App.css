@@ -1,66 +1,142 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main App Container */
 .app {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.app:hover {
+  transform: scale(1.02);
+}
+
+/* Title */
+.title {
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-size: 2.5rem;
+  color: #4a90e2;
+  margin-bottom: 20px;
 }
 
-textarea {
-  width: 80%;
-  height: 100px;
-  margin-bottom: 10px;
-  padding: 10px;
+/* Form Container */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
+/* Textarea Styling */
+.textarea {
+  width: 100%;
+  height: 150px;
+  padding: 15px;
+  border: 2px solid #4a90e2;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s;
 }
 
+.textarea:focus {
+  outline: none;
+  border-color: #50b7c1;
+  box-shadow: 0 0 10px rgba(80, 183, 193, 0.5);
+}
+
+/* Button Styling */
+.button {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+  background-color: #50b7c1;
+  transform: translateY(-2px);
+}
+
+.button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Sentiment Display */
 .sentiment-display {
-  margin-top: 20px;
+  margin-top: 30px;
+  text-align: center;
 }
 
+/* Sentiment Result */
 .sentiment-result {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 20px;
 }
 
 .sentiment-circle {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
 }
 
-.sentiment-label {
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .positive {
-  background-color: green;
+  background-color: #4caf50;
 }
 
 .neutral {
-  background-color: grey;
+  background-color: #9e9e9e;
 }
 
 .negative {
-  background-color: red;
+  background-color: #f44336;
 }
 
-.error-message {
-  color: red;
-  font-size: 18px;
+.sentiment-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
+/* Loading and Error Messages */
 .loading-message {
-  font-size: 18px;
+  font-size: 1.2rem;
   color: #333;
 }
 
+.error-message {
+  font-size: 1.2rem;
+  color: #e74c3c;
+}
+
+/* Pulse Animation for Sentiment Circle */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -70,5 +146,24 @@ button {
   }
   100% {
     transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .button {
+    padding: 10px 25px;
+  }
+
+  .textarea {
+    height: 120px;
   }
 }
