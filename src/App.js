@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState(null); // Changed default state to null for clarity
+  const [sentiment, setSentiment] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -54,15 +54,22 @@ function App() {
 
       <div className="sentiment-display">
         {loading ? (
-          <div>Loading...</div>
+          <div className="loading-message">Loading...</div>
         ) : sentiment ? (
           sentiment === 'Error' ? (
             <div className="error-message">Error fetching sentiment. Please try again.</div>
           ) : (
             <div className="sentiment-result">
-              <div className={`sentiment-label ${sentiment === 'Not Favorable' ? 'negative' : sentiment === 'Neutral' ? 'neutral' : 'positive'}`}>
-                {sentiment}
-              </div>
+              <div
+                className={`sentiment-circle ${
+                  sentiment === 'Not Favorable'
+                    ? 'negative'
+                    : sentiment === 'Neutral'
+                    ? 'neutral'
+                    : 'positive'
+                }`}
+              ></div>
+              <div className="sentiment-label">{sentiment}</div>
             </div>
           )
         ) : null}
