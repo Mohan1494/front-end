@@ -25,7 +25,8 @@ function App() {
       }
 
       const data = await response.json();
-      setSentiment(data.sentiment); // Assuming backend returns { sentiment: 'positive' }
+      console.log("Received response:", data); // Log response to verify the backend response structure
+      setSentiment(data.sentiment); // Assuming backend returns { sentiment: 'Not Favorable' }
     } catch (error) {
       console.error('Error fetching sentiment:', error);
       setSentiment('error'); // Set sentiment to 'error' if request fails
