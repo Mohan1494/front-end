@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './home.css';
 import datasetImage from './assets/dataset-image.png'; // Update this path
 import logisticRegressionImage from './assets/logistic.png'; // Update this path
-import bertModelImage from './assets/bert.png'; // Add the path for the BERT image
+import bertModelImage from './assets/new1.png'; // Add the path for the BERT image
 
 function Home() {
   return (
