@@ -89,14 +89,6 @@ function App() {
                           }`}
                         ></div>
                         <div className="sentiment-label">{result.sentiment}</div>
-                        <div className="confidence-scores">
-                          <p><strong>Confidence Scores:</strong></p>
-                          <ul>
-                            <li>Not Favorable: {result.confidenceScores[0].toFixed(2)}</li>
-                            <li>Favorable: {result.confidenceScores[1].toFixed(2)}</li>
-                            <li>Neutral: {result.confidenceScores[2].toFixed(2)}</li>
-                          </ul>
-                        </div>
                       </div>
                     )
                   ) : null}
