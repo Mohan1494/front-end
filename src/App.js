@@ -1,17 +1,17 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './Home'; // Import the home page
 import './App.css';
 
 function App() {
   const [newsInput, setNewsInput] = useState('');
-  const [sentiment, setSentiment] = useState(null);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setSentiment(null);
+    setResult(null);
 
     try {
       const response = await fetch('https://bert-model-api.onrender.com/predict/', {
@@ -27,14 +27,18 @@ function App() {
       }
 
       const data = await response.json();
-      if (data && data.sentiment) {
-        setSentiment(data.sentiment.trim().toLowerCase());
+      if (data && data.predicted_class !== undefined && data.confidence) {
+        const sentimentLabels = ['not favorable', 'favorable', 'neutral'];
+        const sentiment = sentimentLabels[data.predicted_class]; // Map predicted class to labels
+        const confidenceScores = data.confidence[0]; // Extract confidence array
+
+        setResult({ sentiment, confidenceScores });
       } else {
         throw new Error('Invalid response format');
       }
     } catch (error) {
       console.error('Error:', error);
-      setSentiment('error');
+      setResult({ error: 'Error retrieving sentiment. Please try again.' });
     } finally {
       setLoading(false);
     }
@@ -68,23 +72,31 @@ function App() {
                 <div className="sentiment-display">
                   {loading ? (
                     <div className="loading-message">உணர்வு பகுப்பாய்வு செய்யப்படுகிறது...</div>
-                  ) : sentiment ? (
-                    sentiment === 'error' ? (
-                      <div className="error-message">உணர்வைப் பெறுவதில் பிழை. மீண்டும் முயற்சிக்கவும்.</div>
+                  ) : result ? (
+                    result.error ? (
+                      <div className="error-message">{result.error}</div>
                     ) : (
                       <div className="sentiment-result">
                         <div
                           className={`sentiment-circle ${
-                            sentiment === 'not favorable'
+                            result.sentiment === 'not favorable'
                               ? 'negative'
-                              : sentiment === 'neutral'
+                              : result.sentiment === 'neutral'
                               ? 'neutral'
-                              : sentiment === 'favorable'
+                              : result.sentiment === 'favorable'
                               ? 'positive'
                               : ''
                           }`}
                         ></div>
-                        <div className="sentiment-label">{sentiment}</div>
+                        <div className="sentiment-label">{result.sentiment}</div>
+                        <div className="confidence-scores">
+                          <p><strong>Confidence Scores:</strong></p>
+                          <ul>
+                            <li>Not Favorable: {result.confidenceScores[0].toFixed(2)}</li>
+                            <li>Favorable: {result.confidenceScores[1].toFixed(2)}</li>
+                            <li>Neutral: {result.confidenceScores[2].toFixed(2)}</li>
+                          </ul>
+                        </div>
                       </div>
                     )
                   ) : null}
