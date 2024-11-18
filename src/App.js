@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Home from './Home'; // Import the home page
+import Home from './Home'; // Assuming you have a Home component
 import './App.css';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch('https://bert-model-api.onrender.com/predict', {
+      const response = await fetch('https://bert-model-api.onrender.com/predict', { // Update URL to match backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ function App() {
       if (data && data.predicted_class !== undefined && data.confidence) {
         const sentimentLabels = ['not favorable', 'favorable', 'neutral'];
         const sentiment = sentimentLabels[data.predicted_class]; // Map predicted class to labels
-        const confidenceScores = data.confidence[0]; // Extract confidence array
+        const confidenceScores = data.confidence; // Confidence scores
 
         setResult({ sentiment, confidenceScores });
       } else {
