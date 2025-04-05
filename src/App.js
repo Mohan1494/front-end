@@ -14,7 +14,7 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch('https://bert-model-api.onrender.com/predict', { // Update URL to match backend
+      const response = await fetch('https://model-api-rwbd.onrender.com/predict', { // Update URL to match backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
